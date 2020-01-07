@@ -80,7 +80,7 @@ The interface has of the following methods accessible to peers:
 
 \end{itemize}
 These methods are already being properly called in the provided source code
-(however, the actually transfer of the associated messages is yet to be fixed by
+(however, the actual transfer of the associated messages is yet to be fixed by
 you). Therefore, we leave it to you to find those places in the code and further
 investigate the input and output arguments of the three methods.
 
@@ -205,12 +205,12 @@ name service returns the result of the call as a JSON-encoded object containing
 the output of the method, if it was successful, or an error, if the execution
 failed.
 
-Have a look at the arguments passed to \code{register} (see \sref{interface}). A
-common problem is that \code{socket.gethostname()} in \filename{peer.py} is
-unable to detect the IP address of your machine, in which case the function
-yields \code{127.0.0.1} or alike and the name service receives rather
-meaningless information about the peer. A workaround is to hardcode your IP
-address in \filename{peer.py}.
+% Have a look at the arguments passed to \code{register} (see \sref{interface}). A
+% common problem is that \code{socket.gethostname()} in \filename{peer.py} is
+% unable to detect the IP address of your machine, in which case the function
+% yields \code{127.0.0.1} or alike and the name service receives rather
+% meaningless information about the peer. A workaround is to hardcode your IP
+% address in \filename{peer.py}.
 
 After a successful completion of the lab, each new peer started in a new
 terminal window should output its own address and the addresses of all other
