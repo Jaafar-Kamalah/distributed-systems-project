@@ -14,4 +14,4 @@ structure if the name service changes address.
 
 """
 
-name_service_address = ("chipolata2.ida.liu.se", 42424)
+name_service_address = ("ns-tddd25.edu.liu.se", 42424)

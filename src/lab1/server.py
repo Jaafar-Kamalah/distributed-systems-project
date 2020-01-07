@@ -142,9 +142,9 @@ class Request(threading.Thread):
 # The main program
 # -----------------------------------------------------------------------------
 
-print("Listening to: {}:{}".format(socket.gethostname(), opts.port))
+print("Listening to: {}:{}".format(socket.getfqdn(), opts.port))
 with open("srv_address.tmp", "w") as f:
-    f.write("{}:{}\n".format(socket.gethostname(), opts.port))
+    f.write("{}:{}\n".format(socket.getfqdn(), opts.port))
 
 sync_db = Server(db_file)
 

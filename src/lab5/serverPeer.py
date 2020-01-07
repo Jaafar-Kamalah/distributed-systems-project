@@ -163,7 +163,7 @@ class Server(orb.Peer):
 # -----------------------------------------------------------------------------
 
 # Initialize the client object.
-local_address = (socket.gethostname(), local_port)
+local_address = (socket.getfqdn(), local_port)
 p = Server(local_address, name_service_address, server_type, db_file)
 
 

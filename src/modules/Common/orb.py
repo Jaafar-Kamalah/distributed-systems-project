@@ -110,34 +110,10 @@ class Peer:
         self.type = ptype
         self.hash = ""
         self.id = -1
-        self.address = self._get_external_interface(l_address)
-        self.skeleton = Skeleton(self, self.address)
-        self.name_service_address = self._get_external_interface(ns_address)
+        self.address = l_address
+        self.skeleton = Skeleton(self, ('', l_address[1]))
+        self.name_service_address = ns_address
         self.name_service = Stub(self.name_service_address)
-
-    # Private methods
-
-    def _get_external_interface(self, address):
-        """ Determine the external interface associated with a host name.
-
-        This function translates the machine's host name into its the
-        machine's external address, not into '127.0.0.1'.
-
-        """
-
-        addr_name = address[0]
-        if addr_name != "":
-            addrs = socket.gethostbyname_ex(addr_name)[2]
-            if len(addrs) == 0:
-                raise CommunicationError("Invalid address to listen to")
-            elif len(addrs) == 1:
-                addr_name = addrs[0]
-            else:
-                al = [a for a in addrs if a != "127.0.0.1"]
-                addr_name = al[0]
-        addr = list(address)
-        addr[0] = addr_name
-        return tuple(addr)
 
     # Public methods
 
