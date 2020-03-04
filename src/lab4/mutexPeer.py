@@ -57,7 +57,7 @@ class Client(orb.Peer):
 
     """Distributed mutual exclusion client class."""
 
-    def __init__(self, local_address, ns_address, cient_type):
+    def __init__(self, local_address, ns_address, client_type):
         """Initialize the client."""
         orb.Peer.__init__(self, local_address, ns_address, client_type)
         self.peer_list = PeerList(self)
