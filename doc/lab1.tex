@@ -42,7 +42,7 @@ using the following scheme:
 }
 \end{json}
 The \texttt{method} field contains a string with the name of the function that
-the client wants to call, and the \texttt{args} field contains an array of
+the client wants to call, and the \texttt{args} field contains a list of
 arguments that that function takes. For example, in order to add a new fortune
 into the database of the server, a client might send the following message:
 \begin{json}
@@ -87,7 +87,7 @@ an exception in \python\ is an instance of some exception class. In order to
 create such an instance, one has to know the name of the exception class and the
 arguments that the class' constructor requires. With this in mind, the
 \texttt{name} field delivers the class name of the occurred exception while
-\texttt{args} delivers an array of the parameters to be passed to the
+\texttt{args} delivers a list of the parameters to be passed to the
 constructor of the class.
 
 \section{Your Task}
