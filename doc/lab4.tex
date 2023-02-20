@@ -145,6 +145,14 @@ join and leave the system. For simplicity, you may assume that the peer holding
 the token never disappears (\eg, due to a system crash) without passing the
 token to someone else.
 
+\subsection{Additional notes}
+
+So far in this course we have only explored certain behaviours when it
+comes to locks. You may want to consult the Python documentation for
+\code{threading.Condition} for some additional mechanisms (rather than
+try to implement them yourself, as this is not the focus of this
+lab).\cite{python-condition}
+
 \section{Conclusion}
 In this lab, you have implemented one of the algorithms for distributed mutual
 exclusion. As motivated in the introduction, such an algorithm is a crucial
