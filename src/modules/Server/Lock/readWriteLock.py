@@ -31,9 +31,6 @@ class ReadWriteLock(object):
         self.reader_count = 0
         self.reader_lock = threading.Lock()
         self.writer_lock = threading.Lock()
-
-    # Yes, you can find the answer using git history. Don't. You'll
-    # still need to explain your solution.
     
     # Public methods
     def read_acquire(self):
