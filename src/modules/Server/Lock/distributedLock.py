@@ -13,8 +13,9 @@ This implementation is based on the second Ricart-Agrawala algorithm.
 The implementation should satisfy the following requests:
     --  when starting, the peer with the smallest id in the peer list
         should get the token.
-    --  access to the state of each peer (dictionaries: request, token,
-        and peer_list) should be protected.
+    -- access to the state of each peer (for example the request and
+        token dictionaries, and the and peer_list) should be
+        protected.
     --  the implementation should graciously handle situations when a
         peer dies unexpectedly. All exceptions coming from calling
         peers that have died, should be handled such as the rest of the
