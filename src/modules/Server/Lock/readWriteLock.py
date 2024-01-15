@@ -36,13 +36,13 @@ class ReadWriteLock(object):
     def read_acquire(self):
         pass    
         #
-        # Your code here. Replace the pass line above.
+        # Your code here. Replace the "pass" line above with useful code. pass is a no-op.
         #
 
     def read_release(self):
         pass
         #
-        # Your code here. Replace the pass line above.
+        # Your code here. Replace the "pass" line above with useful code. pass is a no-op.
         #
 
     def write_acquire(self):
