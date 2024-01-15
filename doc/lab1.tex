@@ -16,6 +16,7 @@
 
 \section{Introduction}
 \input{include/assets/single-server.tex}
+
 In the previous lab, you built a non-distributed system composed of a number of
 standalone machines, and each such machine was responsible for both the server
 and client components of your fortune database. You observed that the private
@@ -80,21 +81,32 @@ having the following structure:
     }
 }
 \end{json}
-The occurred error is encoded in \texttt{error} in such a way that it can be
-instantiated and raised on the client side; in fact, it is one of the
-requirements to your implementation. At this point, it is worth recalling that
-an exception in \python\ is an instance of some exception class. In order to
-create such an instance, one has to know the name of the exception class and the
+
+The occurred error is encoded in \texttt{error} in such a way that it
+can be instantiated and raised on the client side. In fact, it is one
+of the requirements to your implementation.
+
+\subsection{A note on exceptions}
+
+At this point, it is worth recalling that an exception in \python\ is
+an instance of some exception class. In order to create such an
+instance, one has to know the name of the exception class and the
 arguments that the class' constructor requires. With this in mind, the
-\texttt{name} field delivers the class name of the occurred exception while
-\texttt{args} delivers a list of the parameters to be passed to the
-constructor of the class.
+\texttt{name} field delivers the class name of the occurred exception
+while \texttt{args} delivers a list of the parameters to be passed to
+the constructor of the class. \emph{In our simplified case, the
+  exception class should be a new class inheriting from BaseException,
+  and with the right name}.
+
+
 
 \section{Your Task}
+
 \subsection{Preparation}
-Continue working with the same code base that you have been working with so far,
-including all the changes that you have made. The files relevant to this lab are
-listed below. You should read and understand them.
+Continue working with the same code base that you have been working
+with so far, including all the changes that you have made. The files
+relevant to this lab are listed below. You should read and understand
+them.
 \begin{itemize}
 
   \item \filename{lab1/client.py} --- the \classname{Client} application (\fix);
@@ -110,18 +122,21 @@ listed below. You should read and understand them.
 
   \item \filename{modules/Server/lock/readWriteLock.py} --- the class utilized
   by \classname{Server} for the purpose of synchronization as motivated in
-  \sref{communication} (\leave);
+  \sref{communication}. Initially this does nothing. (\fix);
 
   \item \filename{modules/Server/database.py} --- the same as for \aref{0}
   (\overwrite).
 
 \end{itemize}
+
 Carefully read the source code and understand what it is doing. Pay
-attention to the missing parts marked with ``Your code here.'' In order to run
-the code, open two terminal windows and change the current folder to
-\filename{lab1}. In one of the terminals, issue the following command in order
-to run the \classname{Server} application (recall that the server is unique in
-this lab):
+attention to the missing parts marked with ``Your code here.''
+
+\subsection{Running the code}
+In order to run the code, open two terminal windows and change the
+current folder to \filename{lab1}. In one of the terminals, issue the
+following command in order to run the \classname{Server} application
+(recall that the server is unique in this lab):
 \begin{shell}
 \$ ./server.py
 Listening to: c-204-13.eduroam.liu.se:45725
@@ -148,20 +163,52 @@ Command> r
 None
 Command>
 \end{shell}
-Note that you have to specify the address that your server is using, and it can
-be a different address each time you restart the server. Regardless of the
-correctness of the address, the system does not work at this stage since neither
-\classname{Server} nor \classname{Client} has the corresponding communication
-part implemented.
 
-In order to ease the testing procedure of this and the future labs, we have
-implemented a set of shell scripts that open the needed terminals and run the
-corresponding commands for you. These scripts are called \filename{test.sh} and
-can be found in the main folder of each lab. For instance, the test script for
-the current lab is \filename{lab1/test.sh}. It is important to note, however,
-that you should be able to set up everything yourself without the help of these
-scripts. So, have a look at the content of the scripts and make sure you
-understand what they do. You can also modify these scripts as you wish.
+Note that you have to specify the address that your server is using,
+and it can be a different address each time you restart the
+server. Regardless of the correctness of the address, the system does
+not work at this stage since neither \classname{Server} nor
+\classname{Client} has the corresponding communication part
+implemented.
+
+In order to ease the testing procedure of this and the future labs, we
+have implemented a set of shell scripts that open the needed terminals
+and run the corresponding commands for you. These scripts are called
+\filename{test.sh} and can be found in the main folder of each
+lab. For instance, the test script for the current lab is
+\filename{lab1/test.sh}. It is important to note, however, that you
+should be able to set up everything yourself without the help of these
+scripts. So, have a look at the content of the scripts and make sure
+you understand what they do. You can also modify these scripts as you
+wish.
+
+\subsection{A note on manual testing}
+
+We use a fairly simple plaintext protocol, where you can easily play
+the part of server or client to test out functionality.
+
+Try communicating manually with the server or client part using
+``nc``\footnote{See \url{https://wizardzines.com/comics/netcat/} or
+  \url{https://linux.die.net/man/1/nc}}. This will allow you to see
+how the client tries to communicate with the server, try out sending
+malformed data to the client or server to see how they respond, or
+respond in a way that should raise an exception at the client side.
+
+As an exercise, start two terminals, one that listens
+continuously/repeateadly (with ``-k``) to TCP port 1234. Then try
+connecting to it and communicating between the terminals (break with
+Ctrl-C).
+\begin{shell}
+  \$ nc localhost 1234
+  Hello
+  ^C
+\end{shell}
+
+Additionally, try out 
+\begin{shell}
+  \$ echo '{"method" : "read"}' | nc localhost 1234
+\end{shell}
+
 
 \subsection{Communication} \slab{communication}
 Using \python's sockets \cite{python-ipc}, complete the implementation of
@@ -176,10 +223,11 @@ following requirements:
   does not stop serving other incoming connections. Your implementation should
   be thread safe as motivated below.
 
-  \item The server should be robust: it should catch and adequately respond to
-  exceptions including those due to potential network problems, violations of
-  the protocol, invocations of non-existing functions, invocations of proper
-  functions but with wrong arguments, \etc
+  \item The server should be robust: it should catch and adequately
+    respond to exceptions including those due to potential network
+    problems, violations of the protocol, invocations of non-existing
+    functions, invocations of proper functions but with wrong
+    arguments, \etc
 
   \item Whenever a client receives an error from the server, it should
     instantiate and raise it as if the error has occurred locally. The
@@ -187,9 +235,11 @@ following requirements:
     difference between the non-distributed and distributed versions of
     the system. Note that the Python library contains a function for
     dynamic class creation (or, to be more precise, type object
-    creation).\cite{python-library}
-
+    creation).\cite{python-library}. See above for a discussion of
+    what we mean by raising the exception locally.
 \end{itemize}
+
+\subsection{Synchronisation}
 
 Since the server can have several threads serving client requests in parallel,
 the operations on the database issued by the clients can interfere with each
@@ -198,8 +248,38 @@ behavior, you should protect the critical parts of your code with a read/write
 lock provided to you in \filename{readWriteLock.py}. Think where the locking
 should take place and how to make it efficient in terms of the waiting time.
 
-Lastly, make sure that, in spite of all possibly occurred exceptions, the server
-keeps on working until it is explicitly stopped by the user.
+Lastly, make sure that, in spite of all possibly occurred exceptions,
+the server keeps on working until it is explicitly stopped by the
+user. The clients may crash, but the server must keep working.
+
+\subsection{Additional questions}
+When demonstrating this lab (as with any lab in the course), you
+should be able to explain your code, but also to evaluate it, and
+relate it to course concepts. In many cases this will involve
+discussing design choices and simplifications that have been made for
+you, and may be somewhat speculative. In some cases you might be asked
+to answer questions with (at least in retrospect) quite obvious
+answers. In this lab, this might include questions such as
+
+\begin{itemize}
+  \item What happens if a message is lost, in this design?
+  \item In this lab (series) we raise exceptions with the right name,
+    that inherit from ``BaseException``, in order to make it seem like
+    we are using a local object. Are there any pros and cons of this
+    approach?
+  \item One cannot focus on everything, and this lab (and course)
+    abstracts away many security concerns. It should however be
+    mentioned. What security concerns can be raised about our current
+    system? Who can access it, and from where?
+  \item We use the ReadWriteLock on the server side (in the actual
+    database object's read and write methods, in the code
+    skeleton). Why don't we provide this on the client side instead? Would
+    you notice any difference when doing manual testing with the
+    textual user interface?
+\end{itemize}
+
+We do not require written answers to this, and you might not need to
+provide a solution to all issues raised by the questions.
 
 \section{Conclusion}
 In this lab, you have implemented a rather na\"{i}ve distributed system: there

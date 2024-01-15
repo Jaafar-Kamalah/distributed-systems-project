@@ -66,12 +66,14 @@ class Server(object):
     def read(self):
         #
         # Your code here.
+        # Don't forget about locking!
         #
         pass
 
     def write(self, fortune):
         #
         # Your code here.
+        # Don't forget about locking!
         #
         pass
 

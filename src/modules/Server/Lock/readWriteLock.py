@@ -32,24 +32,30 @@ class ReadWriteLock(object):
         self.reader_lock = threading.Lock()
         self.writer_lock = threading.Lock()
 
+    # Yes, you can find the answer using git history. Don't. You'll
+    # still need to explain your solution.
+    
     # Public methods
-
     def read_acquire(self):
-        self.reader_lock.acquire()
-        if self.reader_count == 0:
-            self.writer_lock.acquire()
-        self.reader_count = self.reader_count + 1
-        self.reader_lock.release()
+        pass    
+        #
+        # Your code here. Replace the pass line above.
+        #
 
     def read_release(self):
-        self.reader_lock.acquire()
-        self.reader_count = self.reader_count - 1
-        if self.reader_count == 0:
-            self.writer_lock.release()
-        self.reader_lock.release()
+        pass
+        #
+        # Your code here. Replace the pass line above.
+        #
 
     def write_acquire(self):
-        self.writer_lock.acquire()
+        pass
+        #
+        # Your code here. Replace the pass line above.
+        #
 
     def write_release(self):
-        self.writer_lock.release()
+        pass
+        #
+        # Your code here. Replace the pass line above.
+        #
