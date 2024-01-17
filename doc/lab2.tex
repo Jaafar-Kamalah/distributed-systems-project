@@ -188,23 +188,31 @@ marked with ``Your code here.''
 The requirements are similar to those given in \aref{1}:
 \begin{itemize}
 
-  \item The communication protocol that you should maintain is the one described
-  in \aref{1}.
+\item The communication protocol that you should maintain is the one
+  described in \aref{1}.
 
-  \item Your peers should adequately handle exceptions (due to potential network
-  problems, violations of the protocol, invocations of non-existing functions,
-  invocations of proper functions but with wrong arguments, \etc).
+  \item Your peers should adequately handle exceptions (due to
+    potential network problems, violations of the protocol,
+    invocations of non-existing functions, invocations of proper
+    functions but with wrong arguments, \etc). Please note that you
+    might need to raise a `CommunicationError` in certain cases. If
+    you want to be more verbose about the kinds of errors that might,
+    feel free. 
 
-  \item Whenever a peer receives an error in response to a method call, it
-  should instantiate and raise this error as if it has occurred locally.
+  \item Whenever a peer receives an error in response to a method
+    call, it should instantiate and raise this error as if it has
+    occurred locally. Note how you raise exceptions, from the
+    requirements and discussion in \aref{1}. Do not assume that the
+    exception class necessarily exists locally.
 
 \end{itemize}
-As you remember, each remote method invocation should be encoded in JSON and
-sent to the remote side, which is always the name service in this lab. In this
-regard, pay your attention to the \code{\_rmi} function in \classname{Stub}. The
-name service returns the result of the call as a JSON-encoded object containing
-the output of the method, if it was successful, or an error, if the execution
-failed.
+
+As you remember, each remote method invocation should be encoded in
+JSON and sent to the remote side, which is always the name service in
+this lab. In this regard, pay your attention to the \code{\_rmi}
+function in \classname{Stub}. The name service returns the result of
+the call as a JSON-encoded object containing the output of the method,
+if it was successful, or an error, if the execution failed.
 
 % Have a look at the arguments passed to \code{register} (see \sref{interface}). A
 % common problem is that \code{socket.gethostname()} in \filename{peer.py} is
@@ -213,12 +221,53 @@ failed.
 % meaningless information about the peer. A workaround is to hardcode your IP
 % address in \filename{peer.py}.
 
-After a successful completion of the lab, each new peer started in a new
-terminal window should output its own address and the addresses of all other
-peers that have already been started and have not been terminated. However,
-those other peers will not (and, in this lab, are not supposed to) see the new
-one. Remember that you are provided with a test script
-(\filename{lab2/test.sh}), which can set up everything for you.
+After a successful completion of the lab, each new peer started in a
+new terminal window should output its own address and the addresses of
+all other peers that have already been started and have not been
+terminated. However, those other peers will not (and, in this lab, are
+not supposed to) see the new one. Remember that you are provided with
+a test script (\filename{lab2/test.sh}), which can set up everything
+for you.
+
+\subsection{A note on manual testing}
+
+A reminder: testing your implementation manually, as in that section
+of \aref{1} will be of interest.
+
+
+\subsection{Additional questions}
+When demonstrating this lab (as with any lab in the course), you
+should be able to explain your code, but also to evaluate it, and
+relate it to course concepts. In many cases this will involve
+discussing design choices and simplifications that have been made for
+you, and may be somewhat speculative. In some cases you might be asked
+to answer questions with (at least in retrospect) quite obvious
+answers. In this lab, this might include questions such as
+
+\begin{itemize}
+  \item Let's say we have a stub for a remote database object. How
+    much database state is kept in that local object?
+    
+  \item The illusion we want to preserve is that the remote object is
+    a local one, and we are attempting to build a rather generic setup
+    (where you can provide stub/skeleton pairs for many types of
+    objects). Are there any restrictions (assuming that communication
+    works perfectly) on the kinds of objects or return values that we
+    can wrap, while preserving this illusion?
+  
+  \item In this implementation we both have both a Skeleton class and
+    a Request class. Concretely we may have skeleton instance wrapping
+    a database object. What additional functionality is gained by
+    having this separation, rather than just invoking the method on
+    the Skeleton object's owner directly? Does this introduce any
+    restrictions on the class that we provide a skeleton for?
+
+\end{itemize}
+
+We do not require written answers to this, and you might not need to
+provide a solution to all issues raised by the questions.
+
+
 
 \section{Conclusion}
 Having completed the lab, you have made an important step towards your
