@@ -119,6 +119,30 @@ After the implementation has been completed, run the system once again and make
 sure that now you can exchange messages without any problems. Use the test
 script to start several clients at once.
 
+\subsection{Additional questions}
+When demonstrating this lab (as with any lab in the course), you
+should be able to explain your code, but also to evaluate it, and
+relate it to course concepts. In many cases this will involve
+discussing design choices and simplifications that have been made for
+you, and may be somewhat speculative. In some cases you might be asked
+to answer questions with (at least in retrospect) quite obvious
+answers. In this lab, this might include questions such as
+
+\begin{itemize}
+\item In the \classname{PeerList} class there is a comment about only
+  adding peers with lower ID:s, and possible deadlocks. What does this
+  mean? Can you provide a situation where it deadlocks? Making up a
+  simple example might be helpful. What kind of testing might be able
+  to find this?
+  \item What happens if a peer is temporarily unavailable or
+    unreachable when someone invokes a method on its stub? Specify
+    what your implementation does in this case.
+\end{itemize}
+
+We do not require written answers to this, and you might not need to
+provide a solution to all issues raised by the questions.
+
+
 \section{Conclusion}
 At this point, you have a rather solid ground for your future distributed
 database of fortunes. Now you can perform remote method invocations in a
