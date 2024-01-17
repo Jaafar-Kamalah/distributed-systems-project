@@ -153,6 +153,34 @@ comes to locks. You may want to consult the Python documentation for
 try to implement them yourself, as this is not the focus of this
 lab).\cite{python-condition}
 
+\subsection{Additional questions}
+When demonstrating this lab (as with any lab in the course), you
+should be able to explain your code, but also to evaluate it, and
+relate it to course concepts. In many cases this will involve
+discussing design choices and simplifications that have been made for
+you, and may be somewhat speculative. In some cases you might be asked
+to answer questions with (at least in retrospect) quite obvious
+answers. In this lab, this might include questions such as
+
+\begin{itemize}  
+  \item In this lab we have several kinds of locks, local and
+    distributed. Can you provide a scenario where a
+    \classname{DistributedLock} (or something with the same kind of
+    functionality) would make sense? What is the purpose of this
+    mechanism? Exclusion? Limiting the number of concurrent accesses?
+    \item We use several kinds of synchronisation mechanisms
+      (local/network) in this lab. What purposes do they serve? Can
+      you provide a scenario where removing all process-local
+      synchronisation mechanisms from the \classname{DistributedLock}
+      could cause issues? What resources are we protecting?
+
+\end{itemize}
+
+We do not require written answers to this, and you might not need to
+provide a solution to all issues raised by the questions.
+
+
+
 \section{Conclusion}
 In this lab, you have implemented one of the algorithms for distributed mutual
 exclusion. As motivated in the introduction, such an algorithm is a crucial
