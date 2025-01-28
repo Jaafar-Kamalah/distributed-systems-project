@@ -231,10 +231,11 @@ following requirements:
 
   \item Whenever a client receives an error from the server, it should
     instantiate and raise it as if the error has occurred locally. The
-    user of the \classname{Client} application should not feel any
-    difference between the non-distributed and distributed versions of
-    the system. Note that the Python library contains a function for
-    dynamic class creation (or, to be more precise, type object
+    user of the \classname{Client} application should not experience
+    any difference between the non-distributed and distributed
+    versions of the system. Note that the Python language provides
+    function, \code{type}, for (among other things) dynamic class
+    creation (or, to be more precise, type object
     creation).\cite{python-library}. See above for a discussion of
     what we mean by raising the exception locally.
 \end{itemize}
