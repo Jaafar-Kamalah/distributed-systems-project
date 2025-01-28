@@ -28,14 +28,16 @@ several peers might try to access shared resources simultaneously. Thus, such
 resources have to be protected in order to eliminate corrupted states of the
 data.
 
-The goal for this lab is to implement an algorithm for distributed mutual
-exclusion, which will address the aforementioned concern. This locking-enhanced
-configuration of the system is depicted in \fref{lock}. More specifically, we
-shall focus on the second Ricart--Agrawala algorithm \cite{lecture67} (the one
-based on tokens). In a nutshell, using this algorithm, peers will be able to
-uniquely determine which of them is allowed to enter its critical section, \ie,
-to operate on the shared resource. This will be achieved by virtue of a
-so-called token, which will be passed between the peers according to a certain
+The goal for this lab is to implement an algorithm for distributed
+mutual exclusion, which will address the aforementioned concern. This
+locking-enhanced configuration of the system is depicted in
+\fref{lock}. More specifically, we shall focus on the second
+Ricart--Agrawala algorithm \cite{lecture67} (the one based on
+tokens). This is the algorithm that you must implement. In a nutshell,
+using this algorithm, peers will be able to uniquely determine which
+of them is allowed to enter its critical section, \ie, to operate on
+the shared resource. This will be achieved by virtue of a so-called
+token, which will be passed between the peers according to a certain
 strategy.
 
 Your foremost task is to get yourself familiar with the Ricart--Agrawala
@@ -168,17 +170,17 @@ answers. In this lab, this might include questions such as
     \classname{DistributedLock} (or something with the same kind of
     functionality) would make sense? What is the purpose of this
     mechanism? Exclusion? Limiting the number of concurrent accesses?
-    \item We use several kinds of synchronisation mechanisms
-      (local/network) in this lab. What purposes do they serve? Can
-      you provide a scenario where removing all process-local
-      synchronisation mechanisms from the \classname{DistributedLock}
-      could cause issues? What resources are we protecting?
-    \item There is a claim about the fairness of the algorithm. What does this mean?
+  \item We use several kinds of synchronisation mechanisms
+    (local/network) in this lab. What purposes do they serve? Can you
+    provide a scenario where removing all process-local
+    synchronisation mechanisms (can you point to those?) from the
+    \classname{DistributedLock} could cause issues? What resources are
+    we protecting?
+  \item There is a claim about the fairness of the algorithm. What does this mean?
 \end{itemize}
 
 We do not require written answers to this, and you might not need to
 provide a solution to all issues raised by the questions.
-
 
 
 \section{Conclusion}
