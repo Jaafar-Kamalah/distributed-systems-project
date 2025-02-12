@@ -126,6 +126,8 @@ class Request(threading.Thread):
             # Threat the socket as a file stream.
             worker = self.conn.makefile(mode="rw")
             # Read the request in a serialized form (JSON).
+            # Note how a line is supposed to end.
+            # https://docs.python.org/3.10/library/io.html#io.IOBase.readline
             request = worker.readline()
             # Process the request.
             result = self.process_request(request)
