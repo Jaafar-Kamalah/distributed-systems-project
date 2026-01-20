@@ -98,8 +98,6 @@ the constructor of the class. \emph{In our simplified case, the
   exception class should be a new class inheriting from BaseException,
   and with the right name}.
 
-
-
 \section{Your Task}
 
 \subsection{Preparation}
@@ -209,6 +207,10 @@ Additionally, try out
   \$ echo '{"method" : "read"}' | nc localhost 1234
 \end{shell}
 
+The command \texttt{ss}\footnote{See
+\url{https://wizardzines.com/comics/ss/}} can be useful for figuring
+out which ports are open (and which process uses them, if you have
+root on your system).
 
 \subsection{Communication} \slab{communication}
 Using \python's sockets \cite{python-ipc}, complete the implementation of
@@ -233,21 +235,33 @@ following requirements:
     instantiate and raise it as if the error has occurred locally. The
     user of the \classname{Client} application should not experience
     any difference between the non-distributed and distributed
-    versions of the system. Note that the Python language provides
-    function, \code{type}, for (among other things) dynamic class
-    creation (or, to be more precise, type object
-    creation).\cite{python-library}. See above for a discussion of
-    what we mean by raising the exception locally.
+    versions of the system. Thus, if there is a
+    \texttt{ServerLocalPermissionError} on the server side, the
+    traceback on the client side should contain something like
+    \texttt{ServerLocalPermissionError: This is the error text} and
+    \emph{not} \texttt{Exception: ServerLocalPermissionError: This is
+      the error text}
+    
+    That is, you can't just raise a standard Exception with the right
+    text and write 'ServerLocalPermissionError' in it. It must be an
+    exception type called ServerLocalPermissionError. As is most often
+    the case, you should \emph{not} use \texttt{eval}.
+    
+    Note that the Python language provides function, \code{type}, for
+    (among other things) dynamic class creation (or, to be more
+    precise, type object creation).\cite{python-library}. See above
+    for a discussion of what we mean by raising the exception locally.
 \end{itemize}
 
 \subsection{Synchronisation}
 
-Since the server can have several threads serving client requests in parallel,
-the operations on the database issued by the clients can interfere with each
-other and leave the database in a corrupted state. In order to prevent this
-behavior, you should protect the critical parts of your code with a read/write
-lock provided to you in \filename{readWriteLock.py}. Think where the locking
-should take place and how to make it efficient in terms of the waiting time.
+Since the server can have several threads serving client requests in
+parallel, the operations on the database issued by the clients can
+interfere with each other and leave the database in a corrupted
+state. In order to prevent this behavior, you should protect the
+critical parts of your code with a read/write lock provided to you in
+\filename{readWriteLock.py}. Consider where the locking should take
+place and how to make it efficient in terms of the waiting time.
 
 Lastly, make sure that, in spite of all possibly occurred exceptions,
 the server keeps on working until it is explicitly stopped by the
@@ -267,7 +281,8 @@ answers. In this lab, this might include questions such as
   \item In this lab (series) we raise exceptions with the right name,
     that inherit from ``BaseException``, in order to make it seem like
     we are using a local object. Are there any pros and cons of this
-    approach?
+    approach? Are there limits to this way of making remote exceptions
+    seem local (more on this in the next lab)?
   \item One cannot focus on everything, and this lab (and course)
     abstracts away many security concerns. It should however be
     mentioned. What security concerns can be raised about our current

@@ -197,13 +197,14 @@ The requirements are similar to those given in \aref{1}:
     functions but with wrong arguments, \etc). Please note that you
     might need to raise a `CommunicationError` in certain cases. If
     you want to be more verbose about the kinds of errors that might,
-    feel free. 
+    feel free
 
   \item Whenever a peer receives an error in response to a method
     call, it should instantiate and raise this error as if it has
     occurred locally. Note how you raise exceptions, from the
     requirements and discussion in \aref{1}. Do not assume that the
-    exception class necessarily exists locally.
+    exception class necessarily exists locally. See lab 1 for the
+    proper behaviour.
 
 \end{itemize}
 
@@ -231,11 +232,14 @@ for you.
 
 \subsection{A note on manual testing}
 
-A reminder: testing your implementation manually, as in that section
-of \aref{1} will be of interest.
+A reminder: testing your implementation manually! That is, try
+communicating manually with both the stub and the skeleton using
+``nc``\footnote{See \url{https://wizardzines.com/comics/netcat/} or
+\url{https://linux.die.net/man/1/nc}}. We will not copy-paste the
+entire section from \aref{1}, so feel free to open that compendium and read the examples.
 
 This note will be relevant to later labs as well, but it will not
-necessarily be copied into all text.
+necessarily be copied into all the text.
 
 \subsection{Additional questions}
 When demonstrating this lab (as with any lab in the course), you
