@@ -34,25 +34,21 @@ class ReadWriteLock(object):
     
     # Public methods
     def read_acquire(self):
-        pass    
-        #
-        # Your code here. Replace the "pass" line above with useful code. pass is a no-op.
-        #
+        self.reader_lock.acquire()
+        self.reader_count += 1
+        if self.reader_count == 1:
+            self.writer_lock.acquire()
+        self.reader_lock.release()
 
     def read_release(self):
-        pass
-        #
-        # Your code here. Replace the "pass" line above with useful code. pass is a no-op.
-        #
+        self.reader_lock.acquire()
+        self.reader_count -= 1
+        if self.reader_count == 0:
+            self.writer_lock.release()
+        self.reader_lock.release()
 
     def write_acquire(self):
-        pass
-        #
-        # Your code here. Replace the pass line above.
-        #
+        self.writer_lock.acquire()
 
     def write_release(self):
-        pass
-        #
-        # Your code here. Replace the pass line above.
-        #
+        self.writer_lock.release()

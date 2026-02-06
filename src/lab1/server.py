@@ -40,7 +40,7 @@ parser.add_argument(
          "The default value is chosen at random."
 )
 parser.add_argument(
-    "-f", "--file", metavar="FILE", dest="file", default="dbs/fortune.db",
+    "-f", "--file", metavar="FILE", dest="file", default="dbs/custom_fortunes.db",
     help="Set the database file. Default: dbs/fortune.db."
 )
 opts = parser.parse_args()
@@ -64,18 +64,19 @@ class Server(object):
     # Public methods
 
     def read(self):
-        #
-        # Your code here.
-        # Don't forget about locking!
-        #
-        pass
+        self.rwlock.read_acquire()
+        try:
+            fortune = self.db.read()
+        finally:
+            self.rwlock.read_release()
+        return fortune
 
     def write(self, fortune):
-        #
-        # Your code here.
-        # Don't forget about locking!
-        #
-        pass
+        self.rwlock.write_acquire()
+        try:
+            self.db.write(fortune)
+        finally:
+            self.rwlock.write_release()
 
 
 class Request(threading.Thread):
@@ -116,10 +117,17 @@ class Request(threading.Thread):
                         }
                     }
         """
-        #
-        # Your code here.
-        #
-        pass
+        try:
+            request_dict = json.loads(request)
+            method_str = request_dict["method"]
+            args = request_dict["args"]
+            method = getattr(self.db_server, method_str)
+            result = method(*args)
+            return json.dumps({"result": result})
+        
+        except Exception as e:
+            return json.dumps({"error": {"name": type(e).__name__, "args": e.args}})
+
 
     def run(self):
         try:
@@ -129,6 +137,7 @@ class Request(threading.Thread):
             # Note how a line is supposed to end.
             # https://docs.python.org/3.10/library/io.html#io.IOBase.readline
             request = worker.readline()
+            print(request)
             # Process the request.
             result = self.process_request(request)
             # Send the result.

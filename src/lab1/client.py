@@ -67,16 +67,36 @@ class DatabaseProxy(object):
     # Public methods
 
     def read(self):
-        #
-        # Your code here.
-        #
-        pass
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.connect(self.address)
+                worker = s.makefile(mode="rw")
+                worker.write( json.dumps({"method": "read", "args": []}) + '\n')
+                worker.flush()
+                result = worker.readline()
+                result_dict = json.loads(result)
+                if "error" in result_dict:
+                    exception = type(result_dict["error"]["name"], (BaseException,), {})
+                    raise exception(*result_dict["error"]["args"])
+                else:
+                    return result_dict["result"]
+            except Exception as e:
+                raise CommunicationError(e)
 
     def write(self, fortune):
-        #
-        # Your code here.
-        #
-        pass
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.connect(self.address)
+                worker = s.makefile(mode="rw")
+                worker.write( json.dumps({"method": "write", "args": [fortune]}) + '\n')
+                worker.flush()
+                result = worker.readline()
+                result_dict = json.loads(result)
+                if "error" in result_dict:
+                    exception = type(result_dict["error"]["name"], (BaseException,), {})
+                    raise exception(*result_dict["error"]["args"])
+            except Exception as e:
+                raise CommunicationError(e)
 
 # -----------------------------------------------------------------------------
 # The main program
