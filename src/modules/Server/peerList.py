@@ -33,26 +33,34 @@ class PeerList(object):
         object has been registered with the name service.
 
         """
-
         self.lock.acquire()
         try:
-            #
-            # Your code here.
-            #
-            pass
+            peers = self.owner.name_service.require_all(self.owner.type)
+            for pid, paddr in peers:
+                if pid < self.owner.id:
+                    self.peers[pid] = orb.Stub(paddr)
+                    try:
+                        self.peers[pid].register_peer(self.owner.id, self.owner.address)
+                    except Exception:
+                        del self.peers[pid] 
+                        continue
         finally:
             self.lock.release()
+
 
     def destroy(self):
         """Unregister this peer from all others in the list."""
 
         self.lock.acquire()
         try:
-            #
-            # Your code here.
-            #
-            pass
+            for pid, stub in self.peers.items():
+                try:
+                    if (pid != self.owner.id):
+                        stub.unregister_peer(self.owner.id)
+                except Exception:
+                    continue   
         finally:
+            self.peers.clear()
             self.lock.release()
 
     def register_peer(self, pid, paddr):

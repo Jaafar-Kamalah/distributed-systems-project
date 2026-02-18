@@ -46,10 +46,22 @@ class Stub(object):
         self.address = tuple(address)
 
     def _rmi(self, method, *args):
-        #
-        # Your code here.
-        #
-        pass
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.connect(self.address) 
+                reqeust = json.dumps({"method": method, "args": args}) # Marshalling
+                worker = s.makefile(mode="rw")
+                worker.write(reqeust + "\n")
+                worker.flush()
+                response = worker.readline()
+                response = json.loads(response) # Unmarshalling
+            except Exception as e:
+                raise CommunicationError(e)
+        
+        if "error" in response: 
+            error_class = type(response["error"]["name"], (BaseException,), {})
+            raise error_class(*response["error"]["args"])
+        return response["result"]
 
     def __getattr__(self, attr):
         """Forward call to name over the network at the given address."""
@@ -68,12 +80,32 @@ class Request(threading.Thread):
         self.conn = conn
         self.owner = owner
         self.daemon = True
+    
+    def process_request(self, request):
+        try:
+            request_dict = json.loads(request)
+            method_str = request_dict["method"]
+            args = request_dict["args"]
+            method = getattr(self.owner, method_str)
+            result = method(*args)
+            return json.dumps({"result": result})
+        
+        except Exception as e:
+            return json.dumps({"error": {"name": type(e).__name__, "args": e.args}})
 
     def run(self):
-        #
-        # Your code here.
-        #
-        pass
+        try:
+            worker = self.conn.makefile(mode="rw")
+            request = worker.readline()
+            #print(request)
+            result = self.process_request(request)
+            worker.write(result + '\n')
+            worker.flush()
+        except Exception as e:
+            print("The connection to the caller has died:")
+            print("\t{}: {}".format(type(e), e))
+        finally:
+            self.conn.close()
 
 
 class Skeleton(threading.Thread):
@@ -90,17 +122,19 @@ class Skeleton(threading.Thread):
         self.address = address
         self.owner = owner
         self.daemon = True
-        #
-        # Your code here.
-        #
+        self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server.bind(self.address)
+        self.server.listen(1)
         pass
 
     def run(self):
-        #
-        # Your code here.
-        #
-        pass
-
+        while True:
+            try:
+                conn, addr = self.server.accept()
+                req = Request(self.owner, conn, addr)
+                req.start()
+            except socket.error:
+                continue
 
 class Peer:
 
