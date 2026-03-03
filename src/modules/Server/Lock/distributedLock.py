@@ -130,6 +130,7 @@ class DistributedLock(object):
                             stub.obtain_token(self._prepare(self.token))
                             break
                         except Exception:
+                            del self.peer_list.peers[pid]
                             del self.request[pid]
                             del self.token[pid]
                             continue
@@ -170,11 +171,12 @@ class DistributedLock(object):
             # Release lock before sending requests to avoid deadlocks
             self.time += 1
             for pid, stub in peers:
-                    try:
-                        stub.request_token(self.time, self.owner.id)
-                    except Exception:
-                        del self.request[pid]
-                        continue
+                try:
+                    stub.request_token(self.time, self.owner.id)
+                except Exception:
+                    del self.peer_list.peers[pid]
+                    del self.request[pid]
+                    continue
 
             # Wait until token is given in obtain_token()
             with self.peer_list.lock:
@@ -203,12 +205,13 @@ class DistributedLock(object):
 
             for pid in peer_ids_rr:
                 if self.request[pid] > self.token[pid]:
-                    self.state = NO_TOKEN
                     self.token[my_id] = self.time
                     try:
                         self.peer_list.peer(pid).obtain_token(self._prepare(self.token))
+                        self.state = NO_TOKEN
                         break
                     except:
+                        del self.peer_list.peers[pid]
                         del self.request[pid]
                         del self.token[pid]
                         continue
@@ -227,7 +230,7 @@ class DistributedLock(object):
                     self.peer_list.peer(pid).obtain_token(self._prepare(self.token))
                     self.state = NO_TOKEN
                 except:
-                    self.state = TOKEN_PRESENT
+                    del self.peer_list.peers[pid]
                     del self.request[pid]
                     del self.token[pid]
         finally:
